@@ -1,0 +1,3 @@
+---
+- name: Restart Buildkite
+  service: name=buildkite-agent state=restarted

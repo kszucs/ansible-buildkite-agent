@@ -1,0 +1,7 @@
+---
+buildkite_agent_conf_dir: "/etc/buildkite-agent"
+buildkite_agent_token: ""
+buildkite_agent_name: "buildkite-agent"
+buildkite_agent_meta_data: "queue=default"
+buildkite_agent_meta_data_ec2_tags: "true"
+buildkite_agent_debug: "false"
