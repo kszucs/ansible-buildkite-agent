@@ -12,10 +12,22 @@
   apt: pkg=buildkite-agent state=present
 
 - name: Configure Buildkite
-  template: src=buildkite-agent.cfg.j2
-            dest="{{ buildkite_agent_conf_dir }}/buildkite-agent.cfg"
-            owner=buildkite-agent
-            group=buildkite-agent
-            mode=0600
+  template:
+    src: "buildkite-agent.cfg.v{{ buildkite_agent_major_version }}.j2"
+    dest: "{{ buildkite_agent_conf_dir }}/buildkite-agent.cfg"
+    owner: buildkite-agent
+    group: buildkite-agent
+    mode: "0600"
   notify:
     - Restart Buildkite
+
+# because: we run the template unit
+- name: Turn off the installed service
+  service:
+    name: buildkite-agent
+    enabled: no
+    state: stopped
+
+- name: "Create buildkite-agent service instances"
+  systemd: name=buildkite-agent@{{item}} state=started enabled=yes
+  with_sequence: start=1 end={{buildkite_agent_count}} stride=1
