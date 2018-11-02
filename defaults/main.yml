@@ -1,11 +1,13 @@
 ---
 # core
 buildkite_agent_conf_dir:
+  Darwin: "/usr/local/etc/buildkite-agent"
   Debian: "/etc/buildkite-agent"
   Windows: "c:/programdata/buildkite-agent"
 buildkite_agent_count: 1
 buildkite_agent_debug: "false"
 buildkite_agent_home_dir:
+  Darwin: "/usr/local/var/buildkite-agent"
   Debian: "/var/lib/buildkite-agent"
   Windows: "c:/users/buildkite-agent"
 buildkite_agent_token: ""
@@ -13,23 +15,22 @@ buildkite_agent_windows_grant_admin: False
 
 # paths config
 buildkite_agent_builds_dir:
+  Darwin: "{{ buildkite_agent_home_dir.Darwin }}/builds"
   Debian: "{{ buildkite_agent_home_dir.Debian }}/builds"
   Windows: "c:/b"  # long filenames will overflow
 buildkite_agent_hooks_dir:
+  Darwin: "{{ buildkite_agent_conf_dir.Darwin }}/hooks"
   Debian: "{{ buildkite_agent_home_dir.Debian }}/hooks"
   Windows: "{{ buildkite_agent_conf_dir.Windows }}/hooks"
 buildkite_agent_plugins_dir:
+  Darwin: "{{ buildkite_agent_home_dir.Darwin }}/plugins"
   Debian: "{{ buildkite_agent_home_dir.Debian }}/plugins"
   Windows: "{{ buildkite_agent_conf_dir.Windows }}/plugins"
-
-# version related
-buildkite_agent_allow_latest: yes
-buildkite_agent_version: "3.4.0"
-buildkite_agent_build_number: "2484"
 
 # configuration values, see https://buildkite.com/docs/agent/v3/configuration
 # note: the booleans are quoted otherwise they are rendered capitalised.
 buildkite_agent_bootstrap_script:
+  Darwin: "{{ buildkite_agent_conf_dir.Darwin }}/bootstrap.sh"
   Debian: "buildkite-agent bootstrap"
   Windows: "buildkite-agent bootstrap"
 buildkite_agent_git_clean_flags: "-fxdq"
@@ -38,8 +39,7 @@ buildkite_agent_no_color: "false"
 buildkite_agent_no_command_eval: "false"
 buildkite_agent_no_plugins: "false"
 buildkite_agent_no_pty: "false"
-buildkite_agent_no_ssh_keyscan: "false"
-buildkite_agent_platform: "amd64"
+buildkite_agent_no_fingerprint_verification: "true"
 buildkite_agent_priority: 1
 buildkite_agent_queue: "default"
 buildkite_agent_tags: []
@@ -48,5 +48,11 @@ buildkite_agent_tags_from_ec2_tags: "false"
 buildkite_agent_tags_from_gcp: "false"
 buildkite_agent_tags_from_host: "false"
 
-# miscellaneous
+# Debian options
+buildkite_agent_allow_latest: yes
+buildkite_agent_version: "3.4.0"
+buildkite_agent_build_number: "2484"
+
+# Windows options
 buildkite_agent_nssm_version: "2.24.101.20180116"
+buildkite_agent_platform: "amd64"

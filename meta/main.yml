@@ -11,8 +11,11 @@ galaxy_info:
     - name: Windows
       versions:
         - "2016"
+    - name: Darwin
   categories:
     - system
   galaxy_tags:
     - buildkite
+    - buidkite-agent
+    - agent
 dependencies: []
