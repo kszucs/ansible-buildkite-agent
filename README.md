@@ -52,6 +52,10 @@ Variable names below map to [the agent configuration documentation](https://buil
 
 - `buildkite_agent_nssm_version` - Which version of [NSSM] to use to manage the buildkite-agent process as a service.
 
+#### Darwin
+
+- `buildkite_agent_load_bash_profile` - Load `$HOME/.bash_profile` with buildkite agent environment hook. Ensures agent will load with bash environment.
+
 ## Example Playbook
 
 See the [examples](./examples/) directory.

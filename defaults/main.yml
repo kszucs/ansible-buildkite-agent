@@ -56,3 +56,6 @@ buildkite_agent_build_number: "2484"
 # Windows options
 buildkite_agent_nssm_version: "2.24.101.20180116"
 buildkite_agent_platform: "amd64"
+
+# Darwin options
+buildkite_agent_load_bash_profile: yes
