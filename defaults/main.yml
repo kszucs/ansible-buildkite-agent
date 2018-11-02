@@ -39,7 +39,7 @@ buildkite_agent_no_color: "false"
 buildkite_agent_no_command_eval: "false"
 buildkite_agent_no_plugins: "false"
 buildkite_agent_no_pty: "false"
-buildkite_agent_no_fingerprint_verification: "true"
+buildkite_agent_no_ssh_keyscan: "false"
 buildkite_agent_priority: 1
 buildkite_agent_queue: "default"
 buildkite_agent_tags: []

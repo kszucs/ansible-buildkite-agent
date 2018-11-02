@@ -34,7 +34,7 @@ Variable names below map to [the agent configuration documentation](https://buil
 - `buildkite_agent_git_clone_flags`
 - `buildkite_agent_git_clean_flags`
 - `buildkite_agent_no_pty`
-- `buildkite_agent_no_fingerprint_verification`
+- `buildkite_agent_no_ssh_keyscan`
 - `buildkite_agent_no_command_eval`
 - `buildkite_agent_no_plugins`
 - `buildkite_agent_no_color`

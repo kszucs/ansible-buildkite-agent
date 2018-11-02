@@ -45,8 +45,8 @@ git-clean-flags={{ buildkite_agent_git_clean_flags }}
 # Do not run jobs within a pseudo terminal
 no-pty={{ buildkite_agent_no_pty }}
 
-# Don't automatically verify SSH fingerprints
-no-automatic-ssh-fingerprint-verification=={{ buildkite_agent_no_fingerprint_verification }}
+# Don't automatically run ssh-keyscan before checkout
+no-ssh-keyscan={{ buildkite_agent_no_ssh_keyscan }}
 
 # Don't allow this agent to run arbitrary console commands
 no-command-eval={{ buildkite_agent_no_command_eval }}
