@@ -19,13 +19,6 @@ An Ansible role to install the [Buildkite Agent](https://buildkite.com/docs/agen
 - `buildkite_agent_hooks_dir` - Path to where agent will look for hooks.
 - `buildkite_agent_plugins_dir` - Path to where agent will look for plugins.
 
-### Version-related
-
-- `buildkite_agent_allow_latest` - whether to allow the latest version to be installed, or instead use a specified version.
-  - **NOTE:** ignored, on Windows (no package manager install option).
-- `buildkite_agent_version` - the main semantic version number to install, when `buildkite_agent_allow_latest` is `False`.
-- `buildkite_agent_build_number` - the build number (ubuntu package name includes this).
-
 ### Configuration settings
 
 Variable names below map to [the agent configuration documentation](https://buildkite.com/docs/agent/v3/configuration#configuration-settings), with the same defaults, except where otherwise stated.
@@ -46,7 +39,16 @@ Variable names below map to [the agent configuration documentation](https://buil
 - `buildkite_agent_no_plugins`
 - `buildkite_agent_no_color`
 
-### Miscellaneous
+### Platform specific settings
+
+#### Debian
+
+- `buildkite_agent_allow_latest` - whether to allow the latest version to be installed, or instead use a specified version.
+  - **NOTE:** ignored, on Windows (no package manager install option).
+- `buildkite_agent_version` - the main semantic version number to install, when `buildkite_agent_allow_latest` is `False`.
+- `buildkite_agent_build_number` - the build number (ubuntu package name includes this).
+
+#### Windows
 
 - `buildkite_agent_nssm_version` - Which version of [NSSM] to use to manage the buildkite-agent process as a service.
 
