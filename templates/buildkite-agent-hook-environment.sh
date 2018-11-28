@@ -1,2 +1,3 @@
 #!/usr/bin/env bash
-[[ -f "$HOME/.bash_profile" ]] && source "$HOME/.bash_profile"
+set -euo pipefail
+[[ -f "${HOME}/.bash_profile" ]] && source "${HOME}/.bash_profile"
