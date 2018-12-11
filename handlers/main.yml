@@ -9,3 +9,11 @@
     name: buildkite-agent
     state: restarted
   when: ansible_os_family == "Windows"
+
+- name: Restart Buildkite Agent and Register for Login
+  command: /usr/local/bin/brew services restart buildkite/buildkite/buildkite-agent
+  when: ansible_os_family == "Darwin"
+
+- name: Start Buildkite Agent and Register for Login
+  command: /usr/local/bin/brew services start buildkite/buildkite/buildkite-agent
+  when: ansible_os_family == "Darwin"
