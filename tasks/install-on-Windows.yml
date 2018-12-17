@@ -5,7 +5,7 @@
     name: "buildkite-agent"
     # TODO: Single static file with no isolation between runs is unsafe (but that's unlikely to occur)
     # TODO: remove the password file afterwards
-    password: "{{ lookup('password', '/tmp/bk-agent-password length=32 chars=ascii_letters,digits,hexdigits,punctuation') }}"
+    password: "{{ lookup('password', '/tmp/bk-agent-password length=32 chars=ascii_letters,digits,@') }}"
     password_never_expires: yes
     user_cannot_change_password: yes
 
