@@ -14,22 +14,22 @@ buildkite_agent_token: ""
 
 # paths config
 buildkite_agent_builds_dir:
-  Darwin: "{{ buildkite_agent_home_dir.Darwin }}/builds"
-  Debian: "{{ buildkite_agent_home_dir.Debian }}/builds"
+  Darwin: "{{ buildkite_agent_home_dir[ansible_os_family] }}/builds"
+  Debian: "{{ buildkite_agent_home_dir[ansible_os_family] }}/builds"
   Windows: "c:/b"  # long filenames will overflow
 buildkite_agent_hooks_dir:
-  Darwin: "{{ buildkite_agent_conf_dir.Darwin }}/hooks"
-  Debian: "{{ buildkite_agent_home_dir.Debian }}/hooks"
-  Windows: "{{ buildkite_agent_conf_dir.Windows }}/hooks"
+  Darwin: "{{ buildkite_agent_conf_dir[ansible_os_family] }}/hooks"
+  Debian: "{{ buildkite_agent_home_dir[ansible_os_family] }}/hooks"
+  Windows: "{{ buildkite_agent_conf_dir[ansible_os_family] }}/hooks"
 buildkite_agent_plugins_dir:
-  Darwin: "{{ buildkite_agent_home_dir.Darwin }}/plugins"
-  Debian: "{{ buildkite_agent_home_dir.Debian }}/plugins"
-  Windows: "{{ buildkite_agent_conf_dir.Windows }}/plugins"
+  Darwin: "{{ buildkite_agent_home_dir[ansible_os_family] }}/plugins"
+  Debian: "{{ buildkite_agent_home_dir[ansible_os_family] }}/plugins"
+  Windows: "{{ buildkite_agent_conf_dir[ansible_os_family] }}/plugins"
 
 # configuration values, see https://buildkite.com/docs/agent/v3/configuration
 # note: the booleans are quoted otherwise they are rendered capitalised.
 buildkite_agent_bootstrap_script:
-  Darwin: "{{ buildkite_agent_conf_dir.Darwin }}/bootstrap.sh"
+  Darwin: "{{ buildkite_agent_conf_dir[ansible_os_family] }}/bootstrap.sh"
   Debian: "buildkite-agent bootstrap"
   Windows: "buildkite-agent bootstrap"
 buildkite_agent_git_clean_flags: "-fxdq"
