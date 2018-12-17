@@ -53,6 +53,10 @@ Variable names below map to [the agent configuration documentation](https://buil
 
 - `buildkite_agent_nssm_version` - Which version of [NSSM] to use to manage the buildkite-agent process as a service.
 
+##### Windows gotchas
+
+- Don't use the buildkite-agent user-profile directory for anything. It will not exist until _after_ the service has been started for the first time, because ... Windows.
+
 #### Darwin
 
 - `buildkite_agent_load_bash_profile` - Load `$HOME/.bash_profile` with buildkite agent environment hook. Ensures agent will load with bash environment.

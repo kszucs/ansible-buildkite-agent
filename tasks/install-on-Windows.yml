@@ -57,7 +57,7 @@
   win_nssm:
     name: buildkite-agent
     user: buildkite-agent
-    state: started
+    state: "{{ 'started' if buildkite_agent_allow_service_startup[ansible_os_family] else 'present' }}"
     # password lookup plugin will return the contents of the file if it exists
     password: "{{ lookup('password', '/tmp/bk-agent-password') }}"
     application: 'c:/program files/buildkite-agent/buildkite-agent.exe'
@@ -65,12 +65,7 @@
     stdout_file: '{{ buildkite_agent_conf_dir[ansible_os_family] }}/buildkite-agent.log'
     stderr_file: '{{ buildkite_agent_conf_dir[ansible_os_family] }}/buildkite-agent.log'
 
-- name: restart the service to force the home directory
-  win_service:
-    name: buildkite-agent
-    state: restarted
-
-- name: make necessary directories, after user home directory exists
+- name: make necessary directories
   win_file:
     state: directory
     path: '{{ item }}'
