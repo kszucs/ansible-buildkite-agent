@@ -11,6 +11,14 @@ buildkite_agent_home_dir:
   Debian: "/var/lib/buildkite-agent"
   Windows: "c:/users/buildkite-agent"
 buildkite_agent_token: ""
+
+# Allow the handlers to re|start service during this role.
+# If you retrieve the registration token secret via some other means, setting these
+# to false allows you to avoid service-startup errors until that's complete.
+buildkite_agent_allow_service_startup:
+  Darwin: true
+  Debian: true
+  Windows: true
 buildkite_agent_windows_grant_admin: False
 
 # paths config
