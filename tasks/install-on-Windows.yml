@@ -60,10 +60,10 @@
     state: "{{ 'started' if buildkite_agent_allow_service_startup[ansible_os_family] else 'present' }}"
     # password lookup plugin will return the contents of the file if it exists
     password: "{{ lookup('password', '/tmp/bk-agent-password') }}"
-    application: 'c:/program files/buildkite-agent/buildkite-agent.exe'
+    application: "c:/program files/buildkite-agent/buildkite-agent.exe"
     app_parameters_free_form: start --config '{{ buildkite_agent_conf_dir[ansible_os_family] }}/buildkite-agent.cfg'
-    stdout_file: '{{ buildkite_agent_conf_dir[ansible_os_family] }}/buildkite-agent.log'
-    stderr_file: '{{ buildkite_agent_conf_dir[ansible_os_family] }}/buildkite-agent.log'
+    stdout_file: "{{ buildkite_agent_conf_dir[ansible_os_family] }}/buildkite-agent.log"
+    stderr_file: "{{ buildkite_agent_conf_dir[ansible_os_family] }}/buildkite-agent.log"
 
 - name: make necessary directories
   win_file:
