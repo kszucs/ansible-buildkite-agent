@@ -11,7 +11,6 @@ buildkite_agent_home_dir:
   Debian: "/var/lib/buildkite-agent"
   Windows: "c:/users/buildkite-agent"
 buildkite_agent_token: ""
-
 # Allow the handlers to re|start service during this role.
 # If you retrieve the registration token secret via some other means, setting these
 # to false allows you to avoid service-startup errors until that's complete.
@@ -19,26 +18,25 @@ buildkite_agent_allow_service_startup:
   Darwin: true
   Debian: true
   Windows: true
-buildkite_agent_windows_grant_admin: False
 
 # paths config
 buildkite_agent_builds_dir:
-  Darwin: "{{ buildkite_agent_home_dir.Darwin }}/builds"
-  Debian: "{{ buildkite_agent_home_dir.Debian }}/builds"
+  Darwin: "{{ buildkite_agent_home_dir[ansible_os_family] }}/builds"
+  Debian: "{{ buildkite_agent_home_dir[ansible_os_family] }}/builds"
   Windows: "c:/b"  # long filenames will overflow
 buildkite_agent_hooks_dir:
-  Darwin: "{{ buildkite_agent_conf_dir.Darwin }}/hooks"
-  Debian: "{{ buildkite_agent_home_dir.Debian }}/hooks"
-  Windows: "{{ buildkite_agent_conf_dir.Windows }}/hooks"
+  Darwin: "{{ buildkite_agent_conf_dir[ansible_os_family] }}/hooks"
+  Debian: "{{ buildkite_agent_home_dir[ansible_os_family] }}/hooks"
+  Windows: "{{ buildkite_agent_conf_dir[ansible_os_family] }}/hooks"
 buildkite_agent_plugins_dir:
-  Darwin: "{{ buildkite_agent_home_dir.Darwin }}/plugins"
-  Debian: "{{ buildkite_agent_home_dir.Debian }}/plugins"
-  Windows: "{{ buildkite_agent_conf_dir.Windows }}/plugins"
+  Darwin: "{{ buildkite_agent_home_dir[ansible_os_family] }}/plugins"
+  Debian: "{{ buildkite_agent_home_dir[ansible_os_family] }}/plugins"
+  Windows: "{{ buildkite_agent_conf_dir[ansible_os_family] }}/plugins"
 
 # configuration values, see https://buildkite.com/docs/agent/v3/configuration
 # note: the booleans are quoted otherwise they are rendered capitalised.
 buildkite_agent_bootstrap_script:
-  Darwin: "{{ buildkite_agent_conf_dir.Darwin }}/bootstrap.sh"
+  Darwin: "{{ buildkite_agent_conf_dir[ansible_os_family] }}/bootstrap.sh"
   Debian: "buildkite-agent bootstrap"
   Windows: "buildkite-agent bootstrap"
 buildkite_agent_git_clean_flags: "-fxdq"
@@ -64,6 +62,7 @@ buildkite_agent_build_number: "2484"
 # Windows options
 buildkite_agent_nssm_version: "2.24.101.20180116"
 buildkite_agent_platform: "amd64"
+buildkite_agent_windows_grant_admin: False
 
 # Darwin options
 buildkite_agent_load_bash_profile: yes
