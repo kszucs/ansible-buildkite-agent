@@ -15,7 +15,7 @@ An Ansible role to install the [Buildkite Agent](https://buildkite.com/docs/agen
 ### Paths-related
 
 - `buildkite_agent_builds_dir` - Path to where agent will perform builds.
-  - Note: on Windows, this is `c:/b` because long filenames still cause a problem.
+  - Note: on Windows, this defaults to `c:/b` because long filenames still cause problems in the 21st Century.
 - `buildkite_agent_hooks_dir` - Path to where agent will look for hooks.
 - `buildkite_agent_plugins_dir` - Path to where agent will look for plugins.
 
@@ -23,21 +23,21 @@ An Ansible role to install the [Buildkite Agent](https://buildkite.com/docs/agen
 
 Variable names below map to [the agent configuration documentation](https://buildkite.com/docs/agent/v3/configuration#configuration-settings), with the same defaults, except where otherwise stated.
 
-- `buildkite_agent_priority`
-- `buildkite_agent_queue` - Override the agent queue (default: `default`)
-- `buildkite_agent_tags` - List of tags for agent; Don't use this to set `queue`, as that is handled via `buildkite_agent_queue` (default: `[]`)
-- `buildkite_agent_tags_from_ec2`
-- `buildkite_agent_tags_from_ec2_tags`
-- `buildkite_agent_tags_from_gcp`
-- `buildkite_agent_tags_from_host`
 - `buildkite_agent_bootstrap_script`
-- `buildkite_agent_git_clone_flags`
 - `buildkite_agent_git_clean_flags`
-- `buildkite_agent_no_pty`
-- `buildkite_agent_no_ssh_keyscan`
+- `buildkite_agent_git_clone_flags`
+- `buildkite_agent_no_color`
 - `buildkite_agent_no_command_eval`
 - `buildkite_agent_no_plugins`
-- `buildkite_agent_no_color`
+- `buildkite_agent_no_pty`
+- `buildkite_agent_no_ssh_keyscan`
+- `buildkite_agent_priority`
+- `buildkite_agent_queue` - Override the agent queue (default: `default`)
+- `buildkite_agent_tags_from_ec2_tags`
+- `buildkite_agent_tags_from_ec2`
+- `buildkite_agent_tags_from_gcp`
+- `buildkite_agent_tags_from_host`
+- `buildkite_agent_tags` - List of tags for agent; Don't use this to set `queue`, as that is handled via `buildkite_agent_queue` (default: `[]`)
 
 ### Platform specific settings
 
@@ -60,6 +60,10 @@ Variable names below map to [the agent configuration documentation](https://buil
 #### Darwin
 
 - `buildkite_agent_load_bash_profile` - Load `$HOME/.bash_profile` with buildkite agent environment hook. Ensures agent will load with bash environment.
+
+### Debugging
+
+- `buildkite_agent_expose_secrets` - if `true`, expose secrets to the ansible log output. Normally they are suppressed via `no_log`.
 
 ## Example Playbook
 
