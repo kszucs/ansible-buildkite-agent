@@ -7,24 +7,31 @@
 - name: make the user
   win_user:
     description: "Runs BuildKite jobs. See https://buildkite.com/docs/agent/v3/windows."
-    name: "buildkite-agent"
+    name: "{{ buildkite_agent_username }}"
     # TODO: Single static file with no isolation between runs is unsafe (but that's unlikely to occur)
     password: "{{ user_password }}"
     password_never_expires: yes
     user_cannot_change_password: yes
 
+- name: add account to Log on as a service
+  win_user_right:
+    name: SeServiceLogonRight
+    users:
+      - .\{{ buildkite_agent_username }}
+    action: add
+
 # when a user is created, their profile directory only starts to exist after first process / logon as that user.
 # we definitely need this to exist for things like .ssh/* and friends.
 - name: make the user profile
   win_user_profile:
-    username: "buildkite-agent"
+    username: "{{ buildkite_agent_username }}"
     state: present
 
 - name: grant administrator privileges to user
   win_group_membership:
     name: Administrators
     members:
-      - buildkite-agent
+      - "{{ buildkite_agent_username }}"
     state: "{{ 'present' if buildkite_agent_windows_grant_admin else 'absent' }}"
   notify:
     - restart-windows-buildkite
@@ -67,20 +74,6 @@
     name: nssm
     version: "{{ buildkite_agent_nssm_version | default('2.24.101.20180116') }}"
 
-# starting the service triggers the home directory to be created.
-# if the home directory exists already, windows will dodge that and not use it.
-- name: configure buildkite-agent as an nssm service
-  win_nssm:
-    name: buildkite-agent
-    user: buildkite-agent
-    state: "{{ 'started' if buildkite_agent_allow_service_startup[ansible_os_family] else 'present' }}"
-    # password lookup plugin will return the contents of the file if it exists
-    password: "{{ user_password }}"
-    application: "c:/program files/buildkite-agent/buildkite-agent.exe"
-    app_parameters_free_form: start {{ buildkite_agent_start_parameters[ansible_os_family] }}
-    stdout_file: "{{ buildkite_agent_conf_dir[ansible_os_family] }}/buildkite-agent.log"
-    stderr_file: "{{ buildkite_agent_conf_dir[ansible_os_family] }}/buildkite-agent.log"
-
 - name: make necessary directories
   win_file:
     state: directory
@@ -93,10 +86,26 @@
 - name: Allow user full control inside necessary locations
   win_acl:
     path: "{{ item }}"
-    user: buildkite-agent
+    user: "{{ buildkite_agent_username }}"
     rights: FullControl
     type: allow
     state: present
     inherit: ContainerInherit, ObjectInherit
   with_items:
     - "{{ buildkite_agent_builds_dir[ansible_os_family] }}"
+
+- name: configure buildkite-agent as an nssm service
+  win_nssm:
+    name: buildkite-agent
+    application: "c:/program files/buildkite-agent/buildkite-agent.exe"
+    arguments: start {{ buildkite_agent_start_parameters[ansible_os_family] }}
+    stdout_file: "{{ buildkite_agent_conf_dir[ansible_os_family] }}/buildkite-agent.log"
+    stderr_file: "{{ buildkite_agent_conf_dir[ansible_os_family] }}/buildkite-agent.log"
+    executable: "{{ buildkite_agent_nssm_exe }}"
+
+- name: configure service
+  win_service:
+    name: buildkite-agent
+    username: "{{ buildkite_agent_username }}"
+    password: "{{ user_password }}"
+    state: "{{ 'started' if buildkite_agent_allow_service_startup[ansible_os_family] else 'stopped' }}"
