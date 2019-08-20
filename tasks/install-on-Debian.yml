@@ -22,6 +22,14 @@
     state: present
   when: buildkite_agent_allow_latest == False
 
+# buildkite-agent user is created by deb package; if the username is customised, create that custom user.
+- name: Create the user to run the agent as if necessary
+  when: agent_username != "buildkite-agent"
+  user:
+    name: "{{ agent_username }}"
+    home: "/var/lib/{{ agent_username }}"  # because the deb creates /var/lib/buildkite-agent by default.
+    description: "{{ buildkite_agent_user_description }}"
+
 - name: Configure Buildkite
   template:
     src: "buildkite-agent.cfg.j2"
@@ -52,7 +60,7 @@
 
 - name: Create buildkite-agent service instance
   systemd:
-    name: "{{ buildkite_agent_username }}"
+    name: "buildkite-agent"
     state: "{{ buildkite_agent_allow_service_startup[ansible_os_family] | ternary('started', 'stopped') }}"
     enabled: true
     daemon_reload: true
