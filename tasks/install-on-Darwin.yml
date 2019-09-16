@@ -1,4 +1,19 @@
 ---
+- name: Add buildkite-agent group
+  group:
+    name: "{{ buildkite_agent_username }}"
+    state: present
+
+- name: Add buildkite-agent user
+  user:
+    append: yes
+    create_home: yes
+    groups: "{{ buildkite_agent_extra_user_groups[ansible_os_family] + buildkite_agent_username }}"
+    home: "/Users/{{ buildkite_agent_username }}"
+    name: "{{ buildkite_agent_username }}"
+    shell: /bin/bash
+    state: present
+
 # https://buildkite.com/docs/agent/v3/osx
 # TODO:
 # * Conditionally upgrade when already present - `brew update && brew upgrade buildkite-agent`
