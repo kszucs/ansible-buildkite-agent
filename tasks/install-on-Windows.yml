@@ -53,9 +53,9 @@
 
 - name: unzip the release
   win_unzip:
-    src: 'c:/windows/temp/buildkite-agent-windows-{{ buildkite_agent_platform }}-{{ buildkite_agent_version }}.zip'
-    dest: 'c:/program files/buildkite-agent'
-    creates: 'c:/program files/buildkite-agent/buildkite-agent.exe'
+    src: "c:/windows/temp/buildkite-agent-windows-{{ buildkite_agent_platform }}-{{ buildkite_agent_version }}.zip"
+    dest: "c:/program files/buildkite-agent"
+    creates: "c:/program files/buildkite-agent/buildkite-agent.exe"
     delete_archive: yes
 
 - name: delete the shipped configuration stub to avoid binary picking it up (buildkite/agent#881)
