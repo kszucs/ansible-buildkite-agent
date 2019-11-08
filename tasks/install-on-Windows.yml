@@ -64,7 +64,6 @@
     state: absent
     path: c:/program files/buildkite-agent/buildkite-agent.cfg
 
-
 - name: render the configuration template
   win_template:
     src: "buildkite-agent.cfg.j2"
