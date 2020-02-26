@@ -8,6 +8,10 @@ buildkite_agent_conf_dir:  # https://github.com/buildkite/agent/blob/master/clic
   Windows: "c:/users/{{ buildkite_agent_username }}/AppData/Local/buildkite-agent"
 buildkite_agent_count: 1
 buildkite_agent_debug: "false"
+buildkite_agent_executable:
+  Darwin: "/usr/bin/buildkite-agent"
+  Debian: "/usr/bin/buildkite-agent"
+  Windows: "c:/program files/buildkite-agent/buildkite-agent.exe"
 buildkite_agent_hide_secrets: true
 buildkite_agent_home_dir:
   Darwin: "/usr/local/var/{{ buildkite_agent_username }}"
@@ -58,9 +62,9 @@ buildkite_agent_no_ssh_keyscan: "false"
 buildkite_agent_priority: 1
 buildkite_agent_queue: "default"
 buildkite_agent_start_parameters:
-  Darwin: ""
-  Debian: ""
-  Windows: "--config {{ buildkite_agent_conf_dir[ansible_os_family] }}/buildkite-agent.cfg"
+  Darwin: "start "
+  Debian: "start "
+  Windows: "start --config {{ buildkite_agent_conf_dir[ansible_os_family] }}/buildkite-agent.cfg"
 buildkite_agent_tags: []
 buildkite_agent_tags_including_queue: "{{ ([['queue', buildkite_agent_queue] | join('=')] + buildkite_agent_tags) | join(',') }}"
 buildkite_agent_tags_from_ec2: "false"

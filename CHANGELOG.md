@@ -9,6 +9,13 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ...
 
+## 4.0.0 - 2020-02-26
+
+Version bump for breaking change.
+
+- `buildkite_agent_executable` option.
+- `buildkite_agent_start_parameters` option must now always begin with `start`.
+
 ## 3.0.0 - 2019-11-13
 
 Version bump for breaking change. This is the same as 2.2.1 with corrected meta/main.yml.

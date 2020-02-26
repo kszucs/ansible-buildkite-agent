@@ -10,7 +10,8 @@ An Ansible role to install the [Buildkite Agent](https://buildkite.com/docs/agen
 - `buildkite_agent_conf_dir` - Buildkite Agent configuration directory (default: `/etc/buildkite-agent`)
 - `buildkite_agent_count` - Number of agents [if you want to run multiple per host](https://buildkite.com/docs/agent/v3/ubuntu#running-multiple-agents).
 - `buildkite_agent_debug` - Flag to enable Buildkite Agent debugging.
-- `buildkite_agent_start_parameters` - supply parameters for the `buildkite start` command.
+- `buildkite_agent_executable` - The location of the buildkite-agent executable.  Defaults to the default platform-specifc installation location.
+- `buildkite_agent_start_parameters` - supply parameters for the `buildkite` command to start the agent.  Must begin with `start`.
 - `buildkite_agent_token` - Buildkite agent registration token. Available from `https://buildkite.com/organizations/{org-slug}/agents`.
 
 ### Paths-related

@@ -99,8 +99,8 @@
 - name: configure buildkite-agent as an nssm service
   win_nssm:
     name: buildkite-agent
-    application: "c:/program files/buildkite-agent/buildkite-agent.exe"
-    arguments: start {{ buildkite_agent_start_parameters[ansible_os_family] }}
+    application: "{{ buildkite_agent_executable[ansible_os_family] }}"
+    arguments: "{{ buildkite_agent_start_parameters[ansible_os_family] }}"
     stdout_file: "{{ buildkite_agent_logs_dir[ansible_os_family] }}/buildkite-agent.log"
     stderr_file: "{{ buildkite_agent_logs_dir[ansible_os_family] }}/buildkite-agent.log"
     executable: "{{ buildkite_agent_nssm_exe }}"
