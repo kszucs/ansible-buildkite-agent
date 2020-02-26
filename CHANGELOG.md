@@ -12,9 +12,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## 3.1.0 - 2020-02-26
 
 Add support for shims/scripts wrapping the `buildkite-agent` binary, instead of directly calling the binary.
-If not using a shim/script, no changes are needed.
+This can be useful, for example, if you need to fetch your agent registration token from a secret store before running `buildkite-agent`.
 
-To use a shim instead of directly calling the `buildkite-agent` binary, set `buildkite_agent_executable`
+If not using a shim/script, no changes are needed.
+To use a shim instead of directly calling the `buildkite-agent` binary, point `buildkite_agent_executable`
 to your shim, and `buildkite_agent_start_command` to your shim's args.
 
 - Added `buildkite_agent_executable` option.
