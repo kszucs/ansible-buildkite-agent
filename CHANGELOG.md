@@ -9,12 +9,16 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ...
 
-## 4.0.0 - 2020-02-26
+## 3.1.0 - 2020-02-26
 
-Version bump for breaking change.
+Add support for shims/scripts wrapping the `buildkite-agent` binary, instead of directly calling the binary.
+If not using a shim/script, no changes are needed.
 
-- `buildkite_agent_executable` option.
-- `buildkite_agent_start_parameters` option must now always begin with `start`.
+To use a shim instead of directly calling the `buildkite-agent` binary, set `buildkite_agent_executable`
+to your shim, and `buildkite_agent_start_command` to your shim's args.
+
+- Added `buildkite_agent_executable` option.
+- Added `buildkite_agent_start_command` option.
 
 ## 3.0.0 - 2019-11-13
 
