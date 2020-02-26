@@ -4,7 +4,7 @@
 # Must unset ExecStart before redefining, otherwise there are 2, which is an error.
 # https://askubuntu.com/questions/659267/how-do-i-override-or-configure-systemd-services
 ExecStart=
-ExecStart=/usr/bin/buildkite-agent start {{ buildkite_agent_start_parameters[ansible_os_family] }}
+ExecStart={{ buildkite_agent_executable[ansible_os_family] }} {{ buildkite_agent_start_command[ansible_os_family] }}
 
 User={{ buildkite_agent_username }}
 
