@@ -3,11 +3,10 @@
 [Service]
 # Must unset ExecStart before redefining, otherwise there are 2, which is an error.
 # https://askubuntu.com/questions/659267/how-do-i-override-or-configure-systemd-services
-ExecStart=
 ExecStart={{ buildkite_agent_executable[ansible_os_family] }} {{ buildkite_agent_start_command[ansible_os_family] }}
 
 User={{ buildkite_agent_username }}
-
+Nice={{ buildkite_agent_nice_value }}
 # These options will only work on systemd newer than late 2017 (https://github.com/systemd/systemd/issues/3991)
 # On older systemd, they will generate a warning, but no error.
 StandardOutput=file:{{ buildkite_agent_logs_dir[ansible_os_family] }}/buildkite-agent.log

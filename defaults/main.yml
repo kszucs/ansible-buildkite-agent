@@ -8,6 +8,7 @@ buildkite_agent_conf_dir:  # https://github.com/buildkite/agent/blob/master/clic
   Windows: "c:/users/{{ buildkite_agent_username }}/AppData/Local/buildkite-agent"
 buildkite_agent_count: 1
 buildkite_agent_debug: "false"
+buildkite_agent_nice_value: '-10'
 buildkite_agent_executable:
   Darwin: "/usr/bin/buildkite-agent"
   Debian: "/usr/bin/buildkite-agent"
