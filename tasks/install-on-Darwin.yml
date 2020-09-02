@@ -15,22 +15,31 @@
 
 - name: Create user
   block:
+    - name: make password for user
+      set_fact:
+        buildkite_agent_user_password: "{{ lookup('password', '/tmp/bk-agent-password length=32 chars=ascii_letters,digits,punctuation') }}"
+      no_log: "{{ buildkite_agent_hide_secrets | default(true) }}"
+
     - name: temp script
       tempfile:
         state: file
-      register: create_user_temp_file
+      register: buildkite_agent_create_user_temp_file
       
     - name: Write script to make user
       copy:
         src: create-local-user.{{ ansible_os_family }}.sh
-        dest: "{{ create_user_temp_file.path }}/create-local-user.sh"
+        dest: "{{ buildkite_agent_create_user_temp_file.path }}/create-local-user.sh"
         mode: 0755
 
     - name: Create user via script
       shell: >-
-        {{ create_user_temp_file.path }}/create-local-user.sh 
+        {{ buildkite_agent_create_user_temp_file.path }}/create-local-user.sh 
         '{{ agent_username }}'
         '{{ buildkite_agent_grant_admin | ternary("true", "false") }}'
+      args:
+        creates: "/Users/{{ agent_username }}"
+      environment:
+        USER_PASSWORD: "{{ buildkite_agent_user_password }}"
 
 - name: Configure Buildkite
   template:

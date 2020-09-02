@@ -52,7 +52,7 @@ function create_user() {
   log "Creating ${user_name} ..."
 
   local user_pass
-  user_pass="$(random_string)"
+  user_pass="${USER_PASSWORD:-"$(random_string)"}"
 
   local home_dir
   home_dir="$(user_home_dir "${user_name}")"
