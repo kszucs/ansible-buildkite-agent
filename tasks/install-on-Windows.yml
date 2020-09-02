@@ -33,7 +33,7 @@
     name: Administrators
     members:
       - "{{ buildkite_agent_username }}"
-    state: "{{ 'present' if buildkite_agent_windows_grant_admin else 'absent' }}"
+    state: "{{ 'present' if buildkite_agent_grant_admin else 'absent' }}"
   notify:
     - restart-windows-buildkite
 
