@@ -49,10 +49,8 @@ function user_home_dir() {
 
 function create_user() {
   local user_name="${1?:"1st arg must be user's username"}"
+  local user_pass="${2?:"2nd arg must be user's password"}"
   log "Creating ${user_name} ..."
-
-  local user_pass
-  user_pass="${USER_PASSWORD:-"$(random_string)"}"
 
   local home_dir
   home_dir="$(user_home_dir "${user_name}")"
@@ -122,8 +120,24 @@ function write_user_defaults() {
   /usr/sbin/chown "${user_name}" "${SETUP_ASSISTANT}.plist"
 }
 
+function configure_auto_login() {
+  local user_name="${1?:"1st arg must be user's username"}"
+  local user_pass="${2?:"2nd arg must be user's password"}"
+
+  log "Setting up automatic login for ${user_name} ..."
+
+  local kc_password_path
+  kc_password_path="$(dirname "${BASH_SOURCE[0]}")/kcpassword"
+  "${kc_password_path}" "${user_pass}"
+  /bin/chmod 600 "/private/etc/kcpassword"
+  /usr/bin/defaults write /Library/Preferences/com.apple.loginwindow autoLoginUser "${user_name}"
+  /bin/chmod 644 "/Library/Preferences/com.apple.loginwindow.plist"
+}
+
 user_name="${1?:"1st arg must be user's name"}"
-want_admin="${2:-"false"}"
+user_type="${2:-"standard"}"
+auto_login="${3:-"true"}"
+user_pass="${USER_PASSWORD:-"$(random_string)"}"
 
 if has_user "${user_name}"; then
   die "Exiting: User exists ${user_name}."
@@ -134,5 +148,10 @@ if [[ -d "${home_dir}" ]]; then
   die "Exiting: Home directory ${home_dir} already existed."
 fi
 
-create_user "${user_name}" "${want_admin}"
+create_user "${user_name}" "${user_pass}" "${user_type}"
 write_user_defaults "${user_name}"
+if [[ "${auto_login}" == "true" ]]; then
+  configure_auto_login "${user_name}" "${user_pass}"
+else
+  log "Skip: auto_login was ${auto_login}. If you want the user to be automatically logged in, choose 'true'."
+fi
