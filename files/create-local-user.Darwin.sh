@@ -105,6 +105,8 @@ function create_user() {
 
   # https://superuser.com/questions/20420/what-is-the-difference-between-the-default-groups-on-mac-os-x
   /usr/bin/dscl "." -append /Groups/staff GroupMembership "${user_name}"
+  # https://stackoverflow.com/questions/1837889/authorize-a-non-admin-developer-in-xcode-mac-os
+  /usr/bin/dscl "." -append /Groups/_developer GroupMembership "${user_name}"
   if [[ "${user_type}" == "admin" ]]; then
     log "Making ${user_name} an admin..."
     /usr/bin/dscl "." -append /Groups/admin GroupMembership "${user_name}"
