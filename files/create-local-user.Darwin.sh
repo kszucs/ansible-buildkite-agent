@@ -11,6 +11,34 @@ function die() {
   exit 1
 }
 
+# Print traceback of call stack, starting from the call location.
+# An optional argument can specify how many additional stack frames to skip.
+print_traceback() {
+  local skip=${1:-0}
+  local start=$((skip + 1))
+  local end=${#BASH_SOURCE[@]}
+  local curr=0
+  log "Traceback (most recent call first):"
+  for ((curr = start; curr < end; curr++)); do
+    local prev=$((curr - 1))
+    local func="${FUNCNAME[$curr]}"
+    local file="${BASH_SOURCE[$curr]}"
+    local line="${BASH_LINENO[$prev]}"
+    log "  at ${file}:${line} in ${func}()"
+  done
+}
+
+_err_trap() {
+  local err=$?
+  local cmd="${BASH_COMMAND:-}"
+  # Disable echoing all commands as this makes the traceback really hard to follow
+  set +x
+  log "panic: uncaught error"
+  print_traceback 1
+  log "${cmd} exited ${err}"
+}
+trap _err_trap ERR
+
 function array_contains() {
   if [[ $1 =~ (^|[[:space:]])$2($|[[:space:]]) ]]; then
     return 0

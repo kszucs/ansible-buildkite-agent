@@ -36,6 +36,7 @@
         '{{ buildkite_agent_grant_admin | ternary("true", "false") }}'
       args:
         creates: "/Users/{{ agent_username }}"
+      become: true
       environment:
         USER_PASSWORD: "{{ buildkite_agent_user_password }}"
 
