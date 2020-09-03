@@ -78,6 +78,7 @@ function user_home_dir() {
 function create_user() {
   local user_name="${1?:"1st arg must be user's username"}"
   local user_pass="${2?:"2nd arg must be user's password"}"
+  local user_type="${3?:"3rd arg must be user's type [standard, admin]"}"
   log "Creating ${user_name} ..."
 
   local home_dir
@@ -104,7 +105,7 @@ function create_user() {
 
   # https://superuser.com/questions/20420/what-is-the-difference-between-the-default-groups-on-mac-os-x
   /usr/bin/dscl "." -append /Groups/staff GroupMembership "${user_name}"
-  if [[ "${want_admin}" == "true" ]]; then
+  if [[ "${user_type}" == "admin" ]]; then
     log "Making ${user_name} an admin..."
     /usr/bin/dscl "." -append /Groups/admin GroupMembership "${user_name}"
   fi
