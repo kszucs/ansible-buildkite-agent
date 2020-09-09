@@ -1,4 +1,18 @@
 ---
+- name: Create the user's group
+  group:
+    name: "{{ buildkite_agent_username }}"
+    state: present
+
+- name: Create the user to run the agent
+  user:
+    name: "{{ buildkite_agent_username }}"
+    create_home: yes
+    home: "/var/lib/{{ buildkite_agent_username }}"  # because the deb creates /var/lib/buildkite-agent by default.
+    shell: ""
+    system: yes
+    uid: "{{ buildkite_agent_user_uid | default(omit) }}"
+
 - name: Configure the Buildkite APT key
   apt_key:
     keyserver: hkp://keyserver.ubuntu.com:80
@@ -21,14 +35,6 @@
     pkg: "buildkite-agent={{ buildkite_agent_version }}-{{ buildkite_agent_build_number }}"
     state: present
   when: buildkite_agent_allow_latest == False
-
-# buildkite-agent user is created by deb package; if the username is customised, create that custom user.
-- name: Create the user to run the agent as if necessary
-  when: buildkite_agent_username != "buildkite-agent"
-  user:
-    name: "{{ buildkite_agent_username }}"
-    home: "/var/lib/{{ buildkite_agent_username }}"  # because the deb creates /var/lib/buildkite-agent by default.
-    description: "{{ buildkite_agent_user_description }}"
 
 - name: Configure Buildkite
   template:
