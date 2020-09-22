@@ -7,6 +7,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## Unreleased
 
+* Fix: all platforms will run `buildkite_agent_count` job-runners now, defaulting to `1`.
+* Fix: macOS `buildkite_agent_executable` is correct for the homebrew install now.
+
 ## 3.2.0: 2020-09-09
 
 * Added: ability to create user (on Debian) with a specific UID.
