@@ -13,7 +13,7 @@
     - name: Install buildkite-agent
       homebrew:
         name: buildkite-agent
-        state: latest
+        state: latest  # noqa 403 homebrew doesn't allow version pinning
 
 - name: Configure Buildkite
   template:
@@ -28,6 +28,6 @@
     src: "buildkite-agent-hook-environment.sh"
     dest: "{{ buildkite_agent_hooks_dir[ansible_os_family] }}/environment"
     mode: "0600"
-  when: buildkite_agent_load_bash_profile == True
+  when: buildkite_agent_load_bash_profile
   notify:
     - "restart-darwin-buildkite"

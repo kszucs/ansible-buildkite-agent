@@ -32,13 +32,13 @@
       apt:
         pkg: "buildkite-agent"
         state: present
-      when: buildkite_agent_allow_latest == True
+      when: buildkite_agent_allow_latest
 
     - name: Install Buildkite Agent
       apt:
         pkg: "buildkite-agent={{ buildkite_agent_version }}-{{ buildkite_agent_build_number }}"
         state: present
-      when: buildkite_agent_allow_latest == False
+      when: not buildkite_agent_allow_latest
 
 - name: Configure Buildkite
   template:
