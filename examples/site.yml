@@ -1,5 +1,5 @@
 ---
-  - hosts: all
+  - hosts: all  # yamllint disable-line rule:indentation
     become: true
 
     pre_tasks:
@@ -7,4 +7,4 @@
         apt: update_cache=yes
 
     roles:
-      - {role: "azavea.buildkite-agent"}
+      - role: azavea.buildkite-agent

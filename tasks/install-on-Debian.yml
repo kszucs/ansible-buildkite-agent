@@ -1,5 +1,5 @@
 ---
-  - name: Create the user's group
+  - name: Create the user's group  # yamllint disable-line rule:indentation
     group:
       name: "{{ buildkite_agent_username }}"
       state: present
@@ -7,11 +7,12 @@
   - name: Create the user to run the agent
     user:
       name: "{{ buildkite_agent_username }}"
-      create_home: yes
+      create_home: true
       group: "{{ buildkite_agent_username }}"
-      home: "/var/lib/{{ buildkite_agent_username }}" # because the deb creates /var/lib/buildkite-agent by default.
+      # because the deb creates /var/lib/buildkite-agent by default.
+      home: /var/lib/{{ buildkite_agent_username }}
       shell: ""
-      system: yes
+      system: true
       uid: "{{ buildkite_agent_user_uid | default(omit) }}"
 
   - name: install buildkite binary
@@ -25,24 +26,24 @@
 
       - name: Configure the Buildkite APT repository
         apt_repository:
-          repo: "deb https://apt.buildkite.com/buildkite-agent stable main"
+          repo: deb https://apt.buildkite.com/buildkite-agent stable main
           state: present
 
       - name: Install Latest Buildkite Agent
         apt:
-          pkg: "buildkite-agent"
+          pkg: buildkite-agent
           state: present
         when: buildkite_agent_allow_latest
 
       - name: Install Buildkite Agent
         apt:
-          pkg: "buildkite-agent={{ buildkite_agent_version }}-{{ buildkite_agent_build_number }}"
+          pkg: buildkite-agent={{ buildkite_agent_version }}-{{ buildkite_agent_build_number }}
           state: present
         when: not buildkite_agent_allow_latest
 
   - name: Configure Buildkite
     template:
-      src: "buildkite-agent.cfg.j2"
+      src: buildkite-agent.cfg.j2
       dest: "{{ buildkite_agent_conf_dir[ansible_os_family] }}/buildkite-agent.cfg"
       owner: "{{ buildkite_agent_username }}"
       group: "{{ buildkite_agent_username }}"
@@ -70,7 +71,7 @@
 
   - name: Create buildkite-agent service instance
     systemd:
-      name: "buildkite-agent"
+      name: buildkite-agent
       state: "{{ buildkite_agent_allow_service_startup[ansible_os_family] | ternary('started', 'stopped') }}"
       enabled: true
       daemon_reload: true

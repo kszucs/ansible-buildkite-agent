@@ -1,20 +1,20 @@
 ---
 galaxy_info:
-  author: 'Peter Mounce' # Started by Hector Castro, with many thanks!
-  description: 'An Ansible role to install the Buildkite Agent.'
-  license: 'Apache'
-  min_ansible_version: '2.9.0'
+  author: Peter Mounce
+  description: An Ansible role to install the Buildkite Agent.
+  license: Apache
+  min_ansible_version: 2.9.0
   platforms:
-    - name: 'Ubuntu'
+    - name: Ubuntu
       versions:
-        - 'focal'
-        - 'xenial'
-    - name: 'Windows'
+        - focal
+        - xenial
+    - name: Windows
       versions:
         - '2016'
-    - name: 'Darwin'
+    - name: Darwin
   galaxy_tags:
-    - 'agent'
-    - 'buildkite'
-    - 'system'
+    - agent
+    - buildkite
+    - system
 dependencies: []
