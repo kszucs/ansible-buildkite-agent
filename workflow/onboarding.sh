@@ -10,8 +10,4 @@ pyenv virtualenv --help >"/dev/null" || log_fatal "You need pyenv-virtualenv. Pl
 
 ! [[ "$(python3 --version)" == "$(cat .python-version) ansible-buildkite-agent" ]] || log_fatal "Please run \`pyenv install && pyenv virtualenv ansible-buildkite-agent\`"
 
-log_action "Installing pip requirements..."
-pip3 install -r requirements.txt
-
-log_action "Warming up pre-commit..."
-pre-commit install-hooks
+workflow/pre-build.sh
