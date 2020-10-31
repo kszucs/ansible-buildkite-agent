@@ -1,111 +1,111 @@
 ---
-- name: make the user
-  win_user:
-    description: "{{ buildkite_agent_user_description }}"
-    name: "{{ buildkite_agent_username }}"
+  - name: make the user
+    win_user:
+      description: "{{ buildkite_agent_user_description }}"
+      name: "{{ buildkite_agent_username }}"
     # TODO: Single static file with no isolation between runs is unsafe (but that's unlikely to occur)
-    password: "{{ buildkite_agent_user_password }}"
-    password_never_expires: yes
-    user_cannot_change_password: yes
-  register: buildkite_agent_user
+      password: "{{ buildkite_agent_user_password }}"
+      password_never_expires: yes
+      user_cannot_change_password: yes
+    register: buildkite_agent_user
 
-- name: add account to Log on as a service
-  win_user_right:
-    name: SeServiceLogonRight
-    users:
-      - .\{{ buildkite_agent_username }}
-    action: add
+  - name: add account to Log on as a service
+    win_user_right:
+      name: SeServiceLogonRight
+      users:
+        - .\{{ buildkite_agent_username }}
+      action: add
 
 # when a user is created, their profile directory only starts to exist after first process / logon as that user.
 # we definitely need this to exist for things like .ssh/* and friends.
-- name: make the user profile
-  win_user_profile:
-    username: "{{ buildkite_agent_user.sid }}"
-    state: present
+  - name: make the user profile
+    win_user_profile:
+      username: "{{ buildkite_agent_user.sid }}"
+      state: present
 
-- name: grant administrator privileges to user
-  win_group_membership:
-    name: Administrators
-    members:
-      - "{{ buildkite_agent_username }}"
-    state: "{{ 'present' if buildkite_agent_windows_grant_admin else 'absent' }}"
-  notify:
-    - restart-windows-buildkite
+  - name: grant administrator privileges to user
+    win_group_membership:
+      name: Administrators
+      members:
+        - "{{ buildkite_agent_username }}"
+      state: "{{ 'present' if buildkite_agent_windows_grant_admin else 'absent' }}"
+    notify:
+      - restart-windows-buildkite
 
-- name: make necessary directories that are safe ahead of user instantiation by service
-  win_file:
-    state: directory
-    path: '{{ item }}'
-  with_items:
-    - 'c:/program files/buildkite-agent'
-    - '{{ buildkite_agent_conf_dir[ansible_os_family] }}'
+  - name: make necessary directories that are safe ahead of user instantiation by service
+    win_file:
+      state: directory
+      path: '{{ item }}'
+    with_items:
+      - 'c:/program files/buildkite-agent'
+      - '{{ buildkite_agent_conf_dir[ansible_os_family] }}'
 
-- name: install buildkite binary
-  when: buildkite_agent_should_install_binary
-  block:
-    - name: fetch buildkite-agent windows release
-      win_get_url:
-        url: https://github.com/buildkite/agent/releases/download/v{{ buildkite_agent_version }}/buildkite-agent-windows-amd64-{{ buildkite_agent_version }}.zip
-        dest: 'c:/windows/temp/buildkite-agent-windows-{{ buildkite_agent_platform }}-{{ buildkite_agent_version }}.zip'
-        timeout: 30
-        follow_redirects: all
+  - name: install buildkite binary
+    when: buildkite_agent_should_install_binary
+    block:
+      - name: fetch buildkite-agent windows release
+        win_get_url:
+          url: https://github.com/buildkite/agent/releases/download/v{{ buildkite_agent_version }}/buildkite-agent-windows-amd64-{{ buildkite_agent_version }}.zip
+          dest: 'c:/windows/temp/buildkite-agent-windows-{{ buildkite_agent_platform }}-{{ buildkite_agent_version }}.zip'
+          timeout: 30
+          follow_redirects: all
 
-    - name: unzip the release
-      win_unzip:
-        src: "c:/windows/temp/buildkite-agent-windows-{{ buildkite_agent_platform }}-{{ buildkite_agent_version }}.zip"
-        dest: "c:/program files/buildkite-agent"
-        creates: "c:/program files/buildkite-agent/buildkite-agent.exe"
-        delete_archive: yes
+      - name: unzip the release
+        win_unzip:
+          src: "c:/windows/temp/buildkite-agent-windows-{{ buildkite_agent_platform }}-{{ buildkite_agent_version }}.zip"
+          dest: "c:/program files/buildkite-agent"
+          creates: "c:/program files/buildkite-agent/buildkite-agent.exe"
+          delete_archive: yes
 
-    - name: delete the shipped configuration stub to avoid binary picking it up (buildkite/agent#881)
-      win_file:
-        state: absent
-        path: c:/program files/buildkite-agent/buildkite-agent.cfg
+      - name: delete the shipped configuration stub to avoid binary picking it up (buildkite/agent#881)
+        win_file:
+          state: absent
+          path: c:/program files/buildkite-agent/buildkite-agent.cfg
 
-- name: render the configuration template
-  win_template:
-    src: "buildkite-agent.cfg.j2"
-    dest: '{{ buildkite_agent_conf_dir[ansible_os_family] }}/buildkite-agent.cfg'
-  notify:
-    - restart-windows-buildkite
+  - name: render the configuration template
+    win_template:
+      src: "buildkite-agent.cfg.j2"
+      dest: '{{ buildkite_agent_conf_dir[ansible_os_family] }}/buildkite-agent.cfg'
+    notify:
+      - restart-windows-buildkite
 
-- name: install nssm to manage the process as a service
-  win_chocolatey:
-    name: nssm
-    version: "{{ buildkite_agent_nssm_version | default('2.24.101.20180116') }}"
+  - name: install nssm to manage the process as a service
+    win_chocolatey:
+      name: nssm
+      version: "{{ buildkite_agent_nssm_version | default('2.24.101.20180116') }}"
 
-- name: make necessary directories
-  win_file:
-    state: directory
-    path: '{{ item }}'
-  with_items:
-    - '{{ buildkite_agent_hooks_dir[ansible_os_family] }}'
-    - '{{ buildkite_agent_plugins_dir[ansible_os_family] }}'
-    - '{{ buildkite_agent_builds_dir[ansible_os_family] }}'
+  - name: make necessary directories
+    win_file:
+      state: directory
+      path: '{{ item }}'
+    with_items:
+      - '{{ buildkite_agent_hooks_dir[ansible_os_family] }}'
+      - '{{ buildkite_agent_plugins_dir[ansible_os_family] }}'
+      - '{{ buildkite_agent_builds_dir[ansible_os_family] }}'
 
-- name: Allow user full control inside necessary locations
-  win_acl:
-    path: "{{ item }}"
-    user: "{{ buildkite_agent_username }}"
-    rights: FullControl
-    type: allow
-    state: present
-    inherit: ContainerInherit, ObjectInherit
-  with_items:
-    - "{{ buildkite_agent_builds_dir[ansible_os_family] }}"
+  - name: Allow user full control inside necessary locations
+    win_acl:
+      path: "{{ item }}"
+      user: "{{ buildkite_agent_username }}"
+      rights: FullControl
+      type: allow
+      state: present
+      inherit: ContainerInherit, ObjectInherit
+    with_items:
+      - "{{ buildkite_agent_builds_dir[ansible_os_family] }}"
 
-- name: configure buildkite-agent as an nssm service
-  win_nssm:
-    name: buildkite-agent
-    application: "{{ buildkite_agent_executable[ansible_os_family] }}"
-    arguments: "{{ buildkite_agent_start_command[ansible_os_family] }}"
-    stdout_file: "{{ buildkite_agent_logs_dir[ansible_os_family] }}/buildkite-agent.log"
-    stderr_file: "{{ buildkite_agent_logs_dir[ansible_os_family] }}/buildkite-agent.log"
-    executable: "{{ buildkite_agent_nssm_exe }}"
+  - name: configure buildkite-agent as an nssm service
+    win_nssm:
+      name: buildkite-agent
+      application: "{{ buildkite_agent_executable[ansible_os_family] }}"
+      arguments: "{{ buildkite_agent_start_command[ansible_os_family] }}"
+      stdout_file: "{{ buildkite_agent_logs_dir[ansible_os_family] }}/buildkite-agent.log"
+      stderr_file: "{{ buildkite_agent_logs_dir[ansible_os_family] }}/buildkite-agent.log"
+      executable: "{{ buildkite_agent_nssm_exe }}"
 
-- name: configure service
-  win_service:
-    name: buildkite-agent
-    username: "{{ buildkite_agent_username }}"
-    password: "{{ buildkite_agent_user_password }}"
-    state: "{{ 'started' if buildkite_agent_allow_service_startup[ansible_os_family] else 'stopped' }}"
+  - name: configure service
+    win_service:
+      name: buildkite-agent
+      username: "{{ buildkite_agent_username }}"
+      password: "{{ buildkite_agent_user_password }}"
+      state: "{{ 'started' if buildkite_agent_allow_service_startup[ansible_os_family] else 'stopped' }}"

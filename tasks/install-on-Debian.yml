@@ -1,76 +1,76 @@
 ---
-- name: Create the user's group
-  group:
-    name: "{{ buildkite_agent_username }}"
-    state: present
+  - name: Create the user's group
+    group:
+      name: "{{ buildkite_agent_username }}"
+      state: present
 
-- name: Create the user to run the agent
-  user:
-    name: "{{ buildkite_agent_username }}"
-    create_home: yes
-    group: "{{ buildkite_agent_username }}"
-    home: "/var/lib/{{ buildkite_agent_username }}"  # because the deb creates /var/lib/buildkite-agent by default.
-    shell: ""
-    system: yes
-    uid: "{{ buildkite_agent_user_uid | default(omit) }}"
+  - name: Create the user to run the agent
+    user:
+      name: "{{ buildkite_agent_username }}"
+      create_home: yes
+      group: "{{ buildkite_agent_username }}"
+      home: "/var/lib/{{ buildkite_agent_username }}" # because the deb creates /var/lib/buildkite-agent by default.
+      shell: ""
+      system: yes
+      uid: "{{ buildkite_agent_user_uid | default(omit) }}"
 
-- name: install buildkite binary
-  when: buildkite_agent_should_install_binary
-  block:
-    - name: Configure the Buildkite APT key
-      apt_key:
-        keyserver: hkp://keyserver.ubuntu.com:80
-        id: 32A37959C2FA5C3C99EFBC32A79206696452D198
-        state: present
+  - name: install buildkite binary
+    when: buildkite_agent_should_install_binary
+    block:
+      - name: Configure the Buildkite APT key
+        apt_key:
+          keyserver: hkp://keyserver.ubuntu.com:80
+          id: 32A37959C2FA5C3C99EFBC32A79206696452D198
+          state: present
 
-    - name: Configure the Buildkite APT repository
-      apt_repository:
-        repo: "deb https://apt.buildkite.com/buildkite-agent stable main"
-        state: present
+      - name: Configure the Buildkite APT repository
+        apt_repository:
+          repo: "deb https://apt.buildkite.com/buildkite-agent stable main"
+          state: present
 
-    - name: Install Latest Buildkite Agent
-      apt:
-        pkg: "buildkite-agent"
-        state: present
-      when: buildkite_agent_allow_latest
+      - name: Install Latest Buildkite Agent
+        apt:
+          pkg: "buildkite-agent"
+          state: present
+        when: buildkite_agent_allow_latest
 
-    - name: Install Buildkite Agent
-      apt:
-        pkg: "buildkite-agent={{ buildkite_agent_version }}-{{ buildkite_agent_build_number }}"
-        state: present
-      when: not buildkite_agent_allow_latest
+      - name: Install Buildkite Agent
+        apt:
+          pkg: "buildkite-agent={{ buildkite_agent_version }}-{{ buildkite_agent_build_number }}"
+          state: present
+        when: not buildkite_agent_allow_latest
 
-- name: Configure Buildkite
-  template:
-    src: "buildkite-agent.cfg.j2"
-    dest: "{{ buildkite_agent_conf_dir[ansible_os_family] }}/buildkite-agent.cfg"
-    owner: "{{ buildkite_agent_username }}"
-    group: "{{ buildkite_agent_username }}"
-    mode: "0600"
-  notify:
-    - restart-systemd-buildkite
+  - name: Configure Buildkite
+    template:
+      src: "buildkite-agent.cfg.j2"
+      dest: "{{ buildkite_agent_conf_dir[ansible_os_family] }}/buildkite-agent.cfg"
+      owner: "{{ buildkite_agent_username }}"
+      group: "{{ buildkite_agent_username }}"
+      mode: "0600"
+    notify:
+      - restart-systemd-buildkite
 
-- name: Create systemd unit override directory
-  file:
-    path: /etc/systemd/system/buildkite-agent.service.d
-    state: directory
-    owner: root
-    group: root
-    mode: "0755"
+  - name: Create systemd unit override directory
+    file:
+      path: /etc/systemd/system/buildkite-agent.service.d
+      state: directory
+      owner: root
+      group: root
+      mode: "0755"
 
-- name: Create systemd unit override
-  template:
-    src: "{{ buildkite_agent_systemd_override_template }}"
-    dest: /etc/systemd/system/buildkite-agent.service.d/100-buildkite-agent-overrides-from-role.conf
-    owner: root
-    group: root
-    mode: "0644"
-  notify:
-    - restart-systemd-buildkite
+  - name: Create systemd unit override
+    template:
+      src: "{{ buildkite_agent_systemd_override_template }}"
+      dest: /etc/systemd/system/buildkite-agent.service.d/100-buildkite-agent-overrides-from-role.conf
+      owner: root
+      group: root
+      mode: "0644"
+    notify:
+      - restart-systemd-buildkite
 
-- name: Create buildkite-agent service instance
-  systemd:
-    name: "buildkite-agent"
-    state: "{{ buildkite_agent_allow_service_startup[ansible_os_family] | ternary('started', 'stopped') }}"
-    enabled: true
-    daemon_reload: true
+  - name: Create buildkite-agent service instance
+    systemd:
+      name: "buildkite-agent"
+      state: "{{ buildkite_agent_allow_service_startup[ansible_os_family] | ternary('started', 'stopped') }}"
+      enabled: true
+      daemon_reload: true
