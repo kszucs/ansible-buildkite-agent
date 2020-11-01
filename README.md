@@ -2,6 +2,8 @@
 
 An Ansible role to install the [Buildkite Agent](https://buildkite.com/docs/agent/v3).
 
+[![Build Status](https://travis-ci.com/improbable-eng/ansible-buildkite-agent.svg?branch=develop)](https://travis-ci.com/improbable-eng/ansible-buildkite-agent)
+
 ## Role Variables
 
 ### Core
