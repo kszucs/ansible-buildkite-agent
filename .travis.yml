@@ -1,11 +1,6 @@
 ---
-addons:
-  artifacts:
-    debug: true
-    paths:
-      - $(git ls-files -o | tr "\n" ":")
-      - $(ls /var/log/*.log | tr "\n" ":")
-      - ${HOME}/.cache/pre-commit/pre-commit.log
+after_script:
+  - workflow/on-failure.sh
 before_install:
   - sudo apt-get -qq update
   - pip install -r requirements.txt
