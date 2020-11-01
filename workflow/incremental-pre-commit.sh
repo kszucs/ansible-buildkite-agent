@@ -6,7 +6,7 @@ log_action "Running pre-commit, incrementally. (You can supply pre-commit flags 
 
 # We need inside CI to have more of the repository to be able to incrementally lint.
 # https://docs.travis-ci.com/user/customizing-the-build/#git-clone-depth
-[[ "${CI}" == "true" ]] && git fetch --unshallow
+[[ "${CI:-}" == "true" ]] && git fetch --unshallow
 
 pre-commit run \
   --from-ref "origin/develop" \

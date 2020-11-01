@@ -9,7 +9,7 @@ cache:
     - $HOME/.cache/pre-commit
 language: python
 script:
-  - workflow/ci.sh
+  - workflow/all.sh
 services:
   - docker
 sudo: required

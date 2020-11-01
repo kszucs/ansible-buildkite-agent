@@ -87,8 +87,10 @@ See the [examples](./examples/) directory.
 ```bash
 # Get set up - one time. Read it first.
 workflow/onboarding.sh
-# Run what CI would.
-workflow/ci.sh
+# Iterate - just run the fast stuff locally, let CI run the slow stuff.
+workflow/local-fast.sh
+# Run everything - what CI would.
+workflow/all.sh
 ```
 
 [NSSM]: https://nssm.cc
