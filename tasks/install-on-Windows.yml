@@ -1,9 +1,13 @@
 ---
+- name: make password for user
+  set_fact:
+    buildkite_agent_user_password: "{{ lookup('password', '/tmp/bk-agent-password length=32 chars=ascii_letters,digits,punctuation') }}"
+  no_log: "{{ buildkite_agent_hide_secrets | default(true) }}"
+
 - name: make the user
   win_user:
     description: "{{ buildkite_agent_user_description }}"
     name: "{{ buildkite_agent_username }}"
-    # TODO: Single static file with no isolation between runs is unsafe (but that's unlikely to occur)
     password: "{{ buildkite_agent_user_password }}"
     password_never_expires: yes
     user_cannot_change_password: yes
@@ -41,7 +45,7 @@
     - '{{ buildkite_agent_conf_dir[ansible_os_family] }}'
 
 - name: install buildkite binary
-  when: buildkite_agent_should_install_binary
+  when: buildkite_agent_should_install_binary[ansible_os_family]
   block:
     - name: fetch buildkite-agent windows release
       win_get_url:
@@ -108,4 +112,4 @@
     name: buildkite-agent
     username: "{{ buildkite_agent_username }}"
     password: "{{ buildkite_agent_user_password }}"
-    state: "{{ 'started' if buildkite_agent_allow_service_startup[ansible_os_family] else 'stopped' }}"
+    state: "{{ buildkite_agent_allow_service_startup[ansible_os_family] | ternary('started', 'stopped') }}"
