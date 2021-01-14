@@ -94,5 +94,5 @@ buildkite_agent_platform: 'amd64'
 buildkite_agent_windows_grant_admin: false
 
 # Darwin options
-buildkite_agent_brew_dir: /usr/local
+buildkite_agent_brew_dir: '/usr/local'
 buildkite_agent_load_bash_profile: true
