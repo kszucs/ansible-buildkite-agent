@@ -72,6 +72,7 @@ Variable names below map to [the agent configuration documentation](https://buil
 
 - `buildkite_agent_homebrew_tap_url` - You could use `git@github.com:buildkite/homebrew-buildkite.git` if you clone over ssh because you find that more reliable, but your ansible connection needs an ssh key to authenticate to github then (forwarding your ssh-agent works fine). Omitted otherwise.
 - `buildkite_agent_load_bash_profile` - Load `$HOME/.bash_profile` with buildkite agent environment hook. Ensures agent will load with bash environment.
+- `buildkite_agent_brew_dir` - Specify where `brew` is installed, `brew` uses different defaults for Intel vs. ARM processors.
 
 ### Debugging
 
