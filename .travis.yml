@@ -1,15 +1,15 @@
 ---
 before_install:
-  - 'sudo apt-get -qq update'
-  - 'pip install -r requirements.txt'
+  - sudo apt-get -qq update
+  - pip install -r requirements.txt
 before_script:
-  - 'workflow/pre-build.sh'
+  - workflow/pre-build.sh
 cache:
   directories:
-    - '$HOME/.cache/pre-commit'
-language: 'python'
+    - $HOME/.cache/pre-commit
+language: python
 script:
-  - 'workflow/ci.sh'
+  - workflow/ci.sh
 services:
-  - 'docker'
-sudo: 'required'
+  - docker
+sudo: required
