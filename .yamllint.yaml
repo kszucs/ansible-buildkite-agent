@@ -18,5 +18,5 @@ rules:
     max: 1200
     level: warning
   quoted-strings:
-    quote-type: any
+    quote-type: single
     required: only-when-needed
