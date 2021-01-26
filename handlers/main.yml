@@ -1,5 +1,5 @@
 ---
-  - name: 'restart-systemd-buildkite'  # yamllint disable-line rule:indentation
+  - name: 'restart-systemd-buildkite'
     systemd:
       name: 'buildkite-agent'
       state: 'restarted'
