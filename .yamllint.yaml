@@ -1,22 +1,22 @@
 ---
 # https://yamllint.readthedocs.io/en/stable/configuration.html#default-configuration
-extends: 'default'
+extends: default
 
 yaml-files:
-  - '.toolsharerc'
-  - '.yamllint.yaml'
+  - .toolsharerc
+  - .yamllint.yaml
   - '*.yaml'
   - '*.yml'
-  - 'OWNERS_ALIASES'
-  - 'OWNERS'
+  - OWNERS_ALIASES
+  - OWNERS
 
 rules:
   document-start:
-    level: 'error'
+    level: error
   indentation: false
   line-length:
     max: 1200
-    level: 'warning'
+    level: warning
   quoted-strings:
     quote-type: any
     required: only-when-needed
