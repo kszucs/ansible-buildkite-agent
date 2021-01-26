@@ -1,5 +1,5 @@
 ---
-# https://buildkite.com/docs/agent/v3/osx
+  # https://buildkite.com/docs/agent/v3/osx
   - name: install buildkite binary
     when: buildkite_agent_should_install_binary[ansible_os_family]
     block:
@@ -13,7 +13,7 @@
       - name: Install buildkite-agent
         homebrew:
           name: buildkite-agent
-          state: latest # noqa 403 homebrew doesn't allow version pinning
+          state: latest  # noqa 403 homebrew doesn't allow version pinning
         become: false
 
   - name: Configure Buildkite

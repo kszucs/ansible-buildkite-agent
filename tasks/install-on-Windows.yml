@@ -20,8 +20,8 @@
         - .\{{ buildkite_agent_username }}
       action: add
 
-# when a user is created, their profile directory only starts to exist after first process / logon as that user.
-# we definitely need this to exist for things like .ssh/* and friends.
+  # when a user is created, their profile directory only starts to exist after first process / logon as that user.
+  # we definitely need this to exist for things like .ssh/* and friends.
   - name: make the user profile
     win_user_profile:
       username: '{{ buildkite_agent_user.sid }}'
@@ -49,7 +49,7 @@
     block:
       - name: fetch buildkite-agent windows release
         win_get_url:
-          url: https://github.com/buildkite/agent/releases/download/v{{ buildkite_agent_version }}/buildkite-agent-windows-amd64-{{ buildkite_agent_version }}.zip # noqa 204
+          url: https://github.com/buildkite/agent/releases/download/v{{ buildkite_agent_version }}/buildkite-agent-windows-amd64-{{ buildkite_agent_version }}.zip  # noqa 204
           dest: c:/windows/temp/buildkite-agent-windows-{{ buildkite_agent_platform }}-{{ buildkite_agent_version }}.zip
           timeout: 30
           follow_redirects: all
