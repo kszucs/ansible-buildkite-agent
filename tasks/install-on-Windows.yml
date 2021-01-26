@@ -49,7 +49,7 @@
   block:
     - name: fetch buildkite-agent windows release
       win_get_url:
-        url: https://github.com/buildkite/agent/releases/download/v{{ buildkite_agent_version }}/buildkite-agent-windows-amd64-{{ buildkite_agent_version }}.zip
+        url: https://github.com/buildkite/agent/releases/download/v{{ buildkite_agent_version }}/buildkite-agent-windows-amd64-{{ buildkite_agent_version }}.zip  # noqa 204
         dest: c:/windows/temp/buildkite-agent-windows-{{ buildkite_agent_platform }}-{{ buildkite_agent_version }}.zip
         timeout: 30
         follow_redirects: all
