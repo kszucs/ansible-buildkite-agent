@@ -51,13 +51,13 @@
   notify:
     - "Restart Buildkite Agent and Register for Login"
 
-  - name: Set environment hook to load bash profile for test runs
-    template:
-      src: buildkite-agent-hook-environment.sh
-      dest: '{{ buildkite_agent_hooks_dir[ansible_os_family] }}/environment'
-      mode: '0444'
-      owner: '{{ buildkite_agent_username }}'
-      group: wheel
-    when: buildkite_agent_load_bash_profile
-    notify:
-      - restart-darwin-buildkite
+- name: Set environment hook to load bash profile for test runs
+  template:
+    src: buildkite-agent-hook-environment.sh
+    dest: '{{ buildkite_agent_hooks_dir[ansible_os_family] }}/environment'
+    mode: '0444'
+    owner: '{{ buildkite_agent_username }}'
+    group: wheel
+  when: buildkite_agent_load_bash_profile
+  notify:
+    - restart-darwin-buildkite
