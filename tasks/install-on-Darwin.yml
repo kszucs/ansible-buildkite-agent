@@ -1,20 +1,20 @@
 ---
-  # https://buildkite.com/docs/agent/v3/osx
-  - name: install buildkite binary
-    when: buildkite_agent_should_install_binary[ansible_os_family]
-    block:
-      - name: Add buildkite's tap
-        homebrew_tap:
-          name: buildkite/buildkite
-          url: '{{ buildkite_agent_homebrew_tap_url | default(omit) }}'
-          state: present
-        become: false
+# https://buildkite.com/docs/agent/v3/osx
+- name: install buildkite binary
+  when: buildkite_agent_should_install_binary[ansible_os_family]
+  block:
+    - name: Add buildkite's tap
+      homebrew_tap:
+        name: buildkite/buildkite
+        url: '{{ buildkite_agent_homebrew_tap_url | default(omit) }}'
+        state: present
+      become: false
 
-      - name: Install buildkite-agent
-        homebrew:
-          name: buildkite-agent
-          state: latest  # noqa 403 homebrew doesn't allow version pinning
-        become: false
+    - name: Install buildkite-agent
+      homebrew:
+        name: buildkite-agent
+        state: latest  # noqa 403 homebrew doesn't allow version pinning
+      become: false
 
 - name: Create user
   block:
